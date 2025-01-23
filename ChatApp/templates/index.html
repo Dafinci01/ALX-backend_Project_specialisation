@@ -1,183 +1,216 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8"/>
-		<meta name="viewport" content="width=device-width", initial-scale="1.0";/>
-		<title> Mylife App</title>
-		<style>
-			/*general page style */
-			body {
-				font-family: Arial, Helvetica, sans-serif;
-				margin: 0;
-				padding: 0;
-				background-color: #f4f4f9;
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>myLife App</title>
+    <style>
+		/* Basic Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-			}
-			header {
-				display: flex;
-				justify-content: space-between;
-				align-items: center;
-				padding: 10px;                        
-				background-color: #fff;
-				border-bottom: 2px  solid #ddd;
-			}
-			header .logo{
-				font-size: 14px;
-				font-weight: bold;
-			}
-			header .search-bar input{
-				padding: 5px;
-				font-size: 16px;
-				border-radius: 50px;
-			}
-			.status-upload  {
-				display: flex;
-				align-items: center;
-				gap: 20px;
-				
-			}
-			.status-list {
-				display: flex;
-				gap: 10px;
-				overflow-x: scroll;
-				max-width: 300px;
-				height: 60px;
-			}
-			.status{
-				width: 60px;
-				height: 60px;
-				border-radius: 50%;
-				overflow: hidden;
-				border: 2px solid #ddd;
-				cursor: pointer;
-			}
-			.status img{
-				width: 100%;
-				height: 100%;
-				object-fit: cover;
-			}
-			#add-status{
-				padding: 5px 10px;
-				font-size: 14px;
-				cursor: pointer;
-				background-color:  #007bff;
-				color: whitesmoke;
-				border: none;
-				border-radius: 5px;
-
-			}
-			header  .profile img{
-				width: 40px;
-				height: 40px;
-				border-radius: 50%;
-			}
-			header .dropdown{
-				cursor: pointer;
-				padding-left: 5px;
-			}
-			/* main layout */
-			.main-container{
-				display: grid;
-				grid-template-columns: 1fr 2fr 3fr;
-				grid-gap: 20px;
-				padding: 20px;
-				height: 100vh;
-			}
-			/* Left column (navigation) */
-			.left-column{
-				background-color: #fff;
-				padding: 20px;
-				border: 1px solid #ddd;
-			}
-			.left-column nav ul{
-				list-style-type: none;
-				padding: 0;
-			}
-			.left-column nav ul li{
-				margin-bottom: 15px;
-				font-size: 18px;
-			}
-			
-		</style>
-	</head>
-	<body>
-		<header>
-			<div class="logo">myLife app</div>
-			<div class="search-bar">
-				<input type="text" placeholder="search">
-
-			</div>
-			<div class="status-upload">
-				<div class="status-list">
-					<!--Example status-->
-					<div class="status">
-						<img src="status1.jpg" alt="Status">
-					</div>
-					<div class="status">
-						<img src="status.jpg" alt="Status">
-					</div>
-					<button id="add-status"> +Add status</button>
-				</div>
-
-			</div>
-			
-			<div class="profile">
-				<img src="profile,jpg" alt="Profile">
-				<div class="dropdown">▼</div>
-			</div>
-
-			
-		</header>
-
-		<div class="main-container">
-			<!--Left Column - Navigation -->
-			<div class="left-column">
-				<nav>
-					<ul>
-						<li>Messages</li>
-						<li>Contacts</li>
-						<li>Status</li>
-						<li>Channels</li>
-						<li>Feeds/Posts</li>
-						<li>Settings</li>
-					</ul>
-				</nav>
-			</div>   
-			
-			<!--Middle Column-->
-			<div class="middle -columns">
-				<!--Concversation and Archived-->
-				<div class="conversations">
-					<h4>All Conversations</h4>
-					#all Chats will dynmically be added here 
-				</div>
-				<div class="archived-chats">
-					<h4>Archived Xhats</h4>
-					#all archived chts will be dynamically  added here 
-				</div>
-			</div>    
-			<!--Right column - chat feed/profile section-->
-			<div class="right-column">
-				<div class="chat-feed">
-					<h2>//all chats appear here</h2>
-				</div>
-				<div class="profile-section">
-					<h2>Profile Info</h2>
-					//user profile details here
-				</div>
-	
-			</div>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+}
 
 
-		</div>
-		
-		
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #fff;
+    border-bottom: 2px solid #ddd;
+}
+
+header .logo {
+    font-size: 24px;
+    font-weight: bold;
+    font-style: italic;
+}
+
+header .search-bar input {
+    padding: 5px;
+    font-size: 16px;
+    border-radius: 30px;
+    border-color: ;
+}
+
+/* Container Layout */
+.container {
+    display: grid;
+    grid-template-columns: 1fr 2fr 4fr 2fr;
+    height: 100%;
+    width: 100%;
+}
+
+/* First Column: Navigation */
+.nav-column {
+    background-color: #ffffff;
+    padding: 20px;
+    border-right: 1px none #ddd;
+}
 
 
 
+.nav-links {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
 
-	</body>
-	<div class="profile">
+.nav-links li {
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
 
-	</div>
+.nav-links li:hover {
+    background-color: #f0f0f0;
+    border-radius: 5px;
+}
+
+/* Second Column: Conversations */
+.conversation-column {
+    background-color: #ffffff;
+    padding: 20px;
+    border-right: 1px none  #ddd;
+    box-shadow: ;
+}
+
+.tabs {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.tabs button {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+}
+
+.tabs button.active {
+    color: ;
+}
+
+/* Third Column: Content */
+.content-column {
+    padding: 20px;
+}
+
+
+.status-list{
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+}
+
+.status {
+    width: 60px;
+    height: 60px;
+    padding: 10px;
+    background-color: #ddd;
+    border-radius: 50%;
+}
+
+.add-status {
+    margin-left: 0px;
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+
+/* Fourth Column: Profile */
+.profile-column {
+    background-color: #ffffff;
+    padding: 20px;
+}
+
+.profile-info {
+    text-align: center;
+}
+
+	</style>
+</head>
+<body>
+    <header>
+        <div class="logo">myLifeApp</div>
+        <div class="search-bar">
+            <input type="text" placeholder="Search">
+        </div>
+        <div class="status-upload">
+            <div class="status-list">
+                <!-- Example Status -->
+                <div class="status">
+                    <img src="status1.jpg" alt="Status">
+                </div>
+                <div class="status">
+                    <img src="status2.jpg" alt="Status">
+                </div>
+                <!-- Add more statuses dynamically -->
+            </div>
+            <!--<button id="add-status">+ Add Status</button>-->
+        </div>
+        <div class="profile">
+            <img src="profile.jpg" alt="Profile">
+            <div class="dropdown">▼</div>
+        </div>
+
+    </header>
+
+
+
+    <div class="container">
+        <!-- First Column: Navigation -->
+        <aside class="nav-column">
+            <ul class="nav-links">
+                <li>AI</li>
+                <li>Messages</li>
+                <li>Contacts</li>
+                <li>Status</li>
+                <li>Channels</li>
+                <li>Feeds/Posts</li>
+                <li>Settings</li>
+            </ul>
+        </aside>
+
+        <!-- Second Column: Conversations -->
+        <div class="conversation-column">
+            <div class="tabs">
+                <button id="all-conversations-tab" class="active">Xhats</button>
+                <button id="archived-tab">Archived Xhats</button>
+            </div>
+            <div class="conversation-content">
+                <!-- Placeholder for conversations -->
+            </div>
+        </div>
+
+        <!-- Third Column: Content Area -->
+        <main class="content-column">
+            <div class="chat-feed">
+                <!-- Placeholder for chats or posts -->
+            </div>
+        </main>
+
+        <!-- Fourth Column: Profile -->
+        <aside class="profile-column">
+            <div class="profile-info">
+                <img src="profile.jpg" alt="Profile Picture">
+                <h3>Username</h3>
+            </div>
+        </aside>
+    </div>
+    <script src="app.js"></script>
+</body>
 </html>
+
