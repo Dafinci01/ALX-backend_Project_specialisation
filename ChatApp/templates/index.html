@@ -45,7 +45,7 @@ header .search-bar input {
 .container {
     display: grid;
     grid-template-columns: 1fr 2fr 4fr 2fr;
-    height: 100%;
+    height: calc(100vh - 50px);
     width: 100%;
 }
 
@@ -210,7 +210,22 @@ header .search-bar input {
             </div>
         </aside>
     </div>
-    <script src="app.js"></script>
+    <script>// Select tabs and conversation content
+        const allConversationsTab = document.getElementById('all-conversations-tab');
+        const archivedTab = document.getElementById('archived-tab');
+        const conversationContent = document.querySelector('.conversation-content');
+        // Tab switching functionality
+        allConversationsTab.addEventListener('click', () => {
+            archivedTab.classList.remove('active');
+            allConversationsTab.classList.add('active');
+            conversationContent.innerHTML = '<p>All Conversations will appear here.</p>';
+        });
+        archivedTab.addEventListener('click', () => {
+            allConversationsTab.classList.remove('active');
+            archivedTab.classList.add('active');
+            conversationContent.innerHTML = '<p>Archived Chats will appear here.</p>';
+        });
+    </script>
 </body>
 </html>
 
