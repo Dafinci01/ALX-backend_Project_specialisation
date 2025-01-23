@@ -14,7 +14,7 @@ users = {}
 @chat_bp.route('/')
 @login_required
 def index():
-    return render_template('index.html', username=current_user.username)
+    return render_template('index.html',conversations=conversatons, username=current_user.username, profile_picture="profile.jpg")
 
 @socketio.on("connect")
 def handle_connect():
