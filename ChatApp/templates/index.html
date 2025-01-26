@@ -17,7 +17,21 @@ body {
     background-color: #f4f4f9;
     margin: 0;
 }
+body.dark-mode .nav-links li{
+    background-color: #333333;
+    color: #ffffff;
+}
+body.dark-mode .conversation-column, 
+body.dark-mode .profile-column{
+    background-color: #242424;
+}
+body.dark-mode .tabs button {
+    color: #ffffff;
+}
 
+body.dark-mode .tabs button::after {
+    background: #ffffff;
+}
 
 header {
     display: flex;
@@ -205,11 +219,11 @@ tabs button.dark-mode::after{
                     <img src="status1.jpg" alt="Status">
                 </div>
                 <div class="status-upload">
-                    <button id="add-status"> +Add Status</button> </button>
+                    <button id="add-status"> +Add Status</button>
                 </div>
                 <!-- Add more statuses dynamically -->
             </div>
-            <!--<button id="add-status">+ Add Status</button>-->
+            
         </div>
         <div class="profile">
             <img src="profile.jpg" alt="Profile">
@@ -292,22 +306,27 @@ tabs button.dark-mode::after{
             archivedTab.classList.add('active');
             conversationContent.innerHTML = '<p>Archived Chats will appear here.</p>';
         });
+        
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
+        const darkModeEnabled = localStorage.getItem('darkMode') === 'true';
 
-        document.getElementById('dark-mode-toggle').addEventListener('click', () => {
+        if (darkModeEnabled) {
+            document.body.classList.add('dark-mode');
+        }
+
+        darkModeToggle.addEventListener('click', () => {
             document.body.classList.toggle('dark-mode');
-            document.querySelector('header').classList.toggle('dark-mode');
-            document.querySelectorAll('.nav-column, .conversation-column, .profile-column').forEach(el => {
-                el.classList.toggle('dark-mode');
-            });
-
+            localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
         });
-        document.getElementByid('add-status').addEventListener('click', () => {
+
+        // Add Status Functionality
+        document.getElementById('add-status').addEventListener('click', () => {
             const newStatus = document.createElement('div');
             newStatus.className = 'status';
             newStatus.innerHTML = '<img src="default-status.jpg" alt="New Status">';
             document.querySelector('.status-list').appendChild(newStatus);
         });
-
     </script>
 </body>
 </html>

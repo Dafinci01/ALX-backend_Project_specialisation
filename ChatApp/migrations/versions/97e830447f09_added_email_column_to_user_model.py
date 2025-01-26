@@ -1,8 +1,8 @@
-"""empty message
+"""Added email column to User model
 
-Revision ID: 9ec8c511d71e
+Revision ID: 97e830447f09
 Revises: 
-Create Date: 2025-01-02 20:12:04.084708
+Create Date: 2025-01-25 22:13:34.264390
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '9ec8c511d71e'
+revision = '97e830447f09'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -23,14 +23,17 @@ def upgrade():
     sa.Column('sender', sa.String(length=50), nullable=False),
     sa.Column('message', sa.Text(), nullable=False),
     sa.Column('avatar', sa.String(length=255), nullable=True),
-    sa.Column('timestamp', sa.DateTime(), nullable=True),
+    sa.Column('timestamp', sa.DateTime(), nullable=False),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('user',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('username', sa.String(length=150), nullable=False),
+    sa.Column('email', sa.String(length=150), nullable=False),
     sa.Column('password', sa.String(length=150), nullable=False),
+    sa.Column('profile_image_url', sa.String(length=300), nullable=True),
     sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('email'),
     sa.UniqueConstraint('username')
     )
     # ### end Alembic commands ###

@@ -1,9 +1,9 @@
-from flask import Blueprint, app, render_template, request, jsonify
+from flask import Blueprint, render_template, request, jsonify, current_app
 from flask_socketio import emit, disconnect
 from flask_login import login_required, current_user
 from models import ChatMessage
-from app import socketio
 from extensions import db
+from extensions import socketio
 import random
 
 chat_bp = Blueprint('chat', __name__)
@@ -14,7 +14,22 @@ users = {}
 @chat_bp.route('/')
 @login_required
 def index():
-    return render_template('index.html',conversations=conversatons, username=current_user.username, profile_picture="profile.jpg")
+    """
+    Index route to display the chat interface.
+    """
+    try:
+        # Fetch conversation data from the database
+        conversation = ChatMessage.query.order_by(ChatMessage.timestamp.asc()).all()
+        # Render the template with conversation data
+        return render_template(
+            'index.html',
+            conversation=conversation or [],
+            username=current_user.username or 'Guest',
+            profile_image_url=current_user.profile_image_url or 'default-profile.jpg'  # Replace with dynamic data if available
+        )
+    except Exception as e:
+        current_app.logger.error(f"Error in index route: {e}")
+        return "An error occurred", 500
 
 @socketio.on("connect")
 def handle_connect():
@@ -69,15 +84,57 @@ def handle_update_username(data):
 
 @chat_bp.route("/chat_history")
 def chat_history():
-    messages = ChatMessage.query.order_by(ChatMessage.timestamp.asc()).all()
-    history = [
-        {
-            "username": message.sender,
-            "avatar": message.avatar,
-            "message": message.message,
-            "timestamp": message.timestamp.isoformat()
-        }
-        for message in messages
-    ]
-    return jsonify(history)
+    """
+    Route to fetch the chat history.
+    """
+    try:
+        messages = ChatMessage.query.order_by(ChatMessage.timestamp.asc()).all()
+        history = [
+            {
+                "username": message.sender,
+                "avatar": message.avatar,
+                "message": message.message,
+                "timestamp": message.timestamp.isoformat()
+            }
+            for message in messages
+        ]
+        return jsonify(history)
+    except Exception as e:
+        current_app.logger.error(f"Error fetching chat history: {e}")
+        return "An error occurred", 500
 
+@chat_bp.route("/conversation-content")
+@login_required
+def conversation():
+    """
+    Route to fetch or initialize conversation data.
+    """
+    try:
+        # Fetch conversation data from the database
+        conversation = ChatMessage.query.order_by(ChatMessage.timestamp.asc()).all()
+        return jsonify([message.to_dict() for message in conversation])  # Assuming to_dict() is implemented
+    except Exception as e:
+        current_app.logger.error(f"Error fetching conversation: {e}")
+        return "An error occurred", 500
+
+@chat_bp.route("/chat-feed")
+@login_required
+def chat_feed():
+    """
+    Route to fetch chat feed data.
+    """
+    try:
+        messages = ChatMessage.query.order_by(ChatMessage.timestamp.desc()).limit(20).all()
+        feed = [
+            {
+                "username": message.sender,
+                "avatar": message.avatar,
+                "message": message.message,
+                "timestamp": message.timestamp.isoformat()
+            }
+            for message in messages
+        ]
+        return jsonify(feed)
+    except Exception as e:
+        current_app.logger.error(f"Error fetching chat feed: {e}")
+        return "An error occurred", 500
