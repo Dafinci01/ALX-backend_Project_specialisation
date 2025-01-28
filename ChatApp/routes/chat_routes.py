@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, jsonify, current_app
 from flask_socketio import emit, disconnect
-from flask_login import login_required, current_user
+from flask_login import  login_required, current_user
 from models import ChatMessage
 from extensions import db
 from extensions import socketio

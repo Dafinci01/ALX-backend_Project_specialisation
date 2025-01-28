@@ -6,22 +6,35 @@
     <title>myLife App</title>
     <style>
         /* Basic Reset */
+        :root{
+            --bg-color: #ffffff;
+            --text-color: #2d2f31;
+            --dark-bg-color: #181818;
+            --dark-text-color: #ffffff;
+            --dropdown-bg: whitesmoke;
+            --border-color: #ddd;
+        }
+        .dark-mode {
+            --bg-color: #2d2f31;
+            --text-color: #ffffff;
+            --dark-bg-color: #3d3f41;
+            --dark-text-color: #ffffff;
+            --dropdown-bg: #333333;
+            --border-color: #444444;
+        }
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            --hover-color: #f0f0f0;
         }
 
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
             margin: 0;
-            color: #000;
-        }
-
-        body.dark-mode {
-            background-color: #181818;
-            color: #ffffff;
+            font-family: Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
         }
 
         header {
@@ -39,14 +52,15 @@
         }
 
         header .logo {
-            font-size: 24px;
+            font-size: 12px;
             font-weight: bold;
             font-style: italic;
+            margin-right: 5px;
         }
 
         header .search-bar input {
             padding: 5px;
-            font-size: 16px;
+            font-size: 8px;
             border-radius: 30px;
             border: 1px solid #ddd;
         }
@@ -57,11 +71,14 @@
             height: calc(100vh - 50px);
             width: 100%;
         }
+        /* navigation styles*/
 
         .nav-column {
+            width: 150px;
             background-color: #ffffff;
             padding: 20px;
             border-right: 1px solid #ddd;
+            height: 100vh;
         }
 
         .nav-column.dark-mode {
@@ -75,19 +92,65 @@
             gap: 15px;
         }
 
-        .nav-links li {
-            padding: 10px;
+        .nav-links {
+            list-style: none;
+            padding: 0;
             cursor: pointer;
             transition: background-color 0.3s;
         }
-
-        .nav-links li:hover {
-            background-color: #f0f0f0;
+        .nav-links > li {
+            position: relative;
+            padding: 5px;
+            cursor: pointer;
+            color: var(--text-color);
             border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .nav-links > li:hover {
+            background-color: var(--hover-color);
         }
 
         .nav-links li.dark-mode:hover {
             background-color: #333333;
+        }
+        /* Dropdown menu */ 
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            left: 0;
+            top: 100%;
+            background: var(--dropdown-bg);
+            font-family: monospace;
+            font-style: italic;
+            font-size: 14px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            padding: 10px;
+            z-index: 1000;
+            white-space: nowrap;
+            min-width: 200px;
+        }
+        .dropdown-menu ul {
+           /* display: flex;*/
+            gap: 15px;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        
+        }
+        .dropdown-menu a {
+            color: var(--text-color);
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+            white-space: nowrap;
+        }
+
+        .dropdown-menu a:hover {
+            background: rgb(177, 197, 232);
         }
 
         .conversation-column {
@@ -99,6 +162,8 @@
         .conversation-column.dark-mode {
             background-color: #242424;
         }
+        
+
 
         .tabs {
             display: flex;
@@ -146,11 +211,12 @@
         .profile-info {
             text-align: center;
         }
-
+        /* Status upload */
         .status-list {
             display: flex;
             gap: 10px;
             overflow-x: auto;
+        
         }
 
         .status {
@@ -159,13 +225,52 @@
             background-color: #ddd;
             border-radius: 50%;
         }
-
+        .status-upload {
+            position: relative;
+            margin: 10px;
+        }
+        .status-menu {
+            display: none;
+            position: absolute;
+            background: var(--dropdown-bg);
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            top: 100%;
+            left: 0;
+            z-index: 10001;
+        }
         .status-upload button {
-            padding: 5px 10px;
+            padding: 5px;
             background-color: #007bff;
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 50px;
+        }
+        .upload-progress {
+            width: 200px;
+            height: 20px;
+            background: #eee;
+            border-radius: 10px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            width: 0%;
+            height: 100%;
+            background: #4CAF50;
+            transition: width 0.3s;
+
+
+        }
+         /* Dark Mode Toggle Button */
+        .dark-mode-toggle button {
+            background: var(--hover-color);
+            color: var(--text-color);
+            border: 1px none var(--border-color);
+            padding: 8px 16px;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -175,73 +280,92 @@
         <div class="search-bar">
             <input type="text" placeholder="Search">
         </div>
-        <div class="status-upload">
-            <button onclick="toggleStatusMenu()"> +Add Status </button>
-            <div id="statusMenu" class="status-menu" style="display: none;">
-                <input type="file" id="statusFile" accept="image/*, video/*">
-                <button onclick="uploadStatus()">Upload</button>
-            </div>
 
+        <div class="status-upload">
+            <button onclick="toggleStatusMenu()">+ Add Status</button>
+            <div id="statusMenu" class="status-menu">
+                <input type="file" id="statusFile" accept="image/*, video/*">
+                <button onclick="startUpload()">Upload</button>
+                <div class="upload-progress">
+                    <div class="progress-bar"></div>
+                </div>
+            </div>
         </div>
+        
         <div class="dark-mode-toggle">
-            <button id="dark-mode-toggle">Dark Mode</button>
+            <button id="dark-mode-toggle" onclick="toggleDarkMode()">Dark Mode</button>
         </div>
     </header>
 
     <div class="container">
         <aside class="nav-column">
             <ul class="nav-links">
-                <li class="ai-menu">
-                    <label for="ai-toggle"><span>AI▾</span>
+                <!--ai dropdown-->
+                <li onmouseenter="showDropdown('aiDropdown')" onmouseleave="hideDropdown('aiDropdown')">
+                    <span>AI▾</span>
                     <div id="aiDropdown" class="dropdown-menu">
                         <ul>
-                            <a href="#">DeepSeek</a>
-                            <a href="#">GPT</a>
-                            <a href="#">Recomendations</a>
+                            <li><a href="#">DeepSeek AI</a></li>
+                            <li><a href="#">ChatGPT</a></li>
+                            <li><a href="#">Recommendations</a></li>
+                            <!--ai recommendations like llma, mistral or gemini -->
                         </ul>
                     </div>
                 </li>
-                <li class="message-menu">
-                    <label for="message-toggle"><span>Messages</span></label>
+
+                <li onmouseenter="showDropdown('messageDropdown')" onmouseleave="hideDropdown('messageDropdown')">
+                    <span>Messages</span>
                     <div id="messageDropdown" class="dropdown-menu">
                         <ul>
-                            <a href="#">Unread</a>
-                            <a href="#">Read</a>
+                            <li><a href="#">Unread ({{ unread_count }})</a></li>
+                            <li><a href="#">Archived</a></li>
                         </ul>
+                    </div>+
                 </li>
-                <li class="contact-menu">
-                    <label for="contact-toggle"><span>Contacts</span></label>
+
+                <!-- Contacts Dropdown -->
+                <li onmouseenter="showDropdown('contactDropdown')" onmouseleave="hideDropdown('contactDropdown')">
+                    <span>Contacts</span>
                     <div id="contactDropdown" class="dropdown-menu">
                         <ul>
-                            <a href="#">Friends/Family</a>
-                            <a href="#">Work</a>
+                            {% for contact in contacts %}
+                            <li><a href="#">Work</a></li>
+                            <li><a href="#"> Family and Friends</a></li>
+                            {% endfor %}
                         </ul>
                     </div>
                 </li>
-
-                <li class="group-menu">
-                    <label for="group"><span>Groups</span></label>
-                </li>
-
+                
+                <li onmouseenter="showDropdown('groupDropdown')" onmouseleave="hideDropdown('groupDropdown')">
+                    <span> Groups </span>
+                    <div id="groupDropdown" class="dropdown-menu">
+                        <ul>
+                            <li><a href="#">Family</a></li>
+                            <li><a href="#">Friends</a></li>
+                            <li><a href="#">Work</a></li>
+                        </ul>
+                    </div>
+                
+                </li>               
                 <li>Status</li>
                 <li>Channels</li>
                 <li>Feeds/Posts</li>
-                <li>
-                    <div class="settings">
-                        <p>Settings ⚙️</p>
-                        <div id="settingsMenu" class=" dropdown-menu" style="display: none;">
-                            <ul>
-                                <li></li><a href="/profile">Profile 👤</a></li>
-                                <li>Account</li>
-                                <li>Privacy</li>
-                                <li>Security</li>
-                                <li><a href="#" onclick="toggleDarkMode()">Dark Mode</a></li>
-                                <li>Logout</li>
-                            </ul>
-                        </div>  
-
-
+                <li onclick="toggleDropdown('settingsMenu')">
+                    <span>Settings ⚙️</span>
+                    <div id="settingsMenu" class="dropdown-menu">
+                        <ul>
+                            <li><a href="/profile">Profile 👤</a></li>
+                            <li><a href="#"> Account  </a></li>
+                            <li><a href="#">Privacy</a></li>
+                            <li><a href="#">Data Saver</a></li>
+                            <li><a href="#">Security & Personalise</a></li>
+                            <li><a href="#" onclick="toggleDarkMode()">Dark Mode</a></li>
+                            <li><a href="/logout">Logout</a></li>
+                        </ul>
+                        
+                    </div>
                 </li>
+                
             </ul>
         </aside>
 
@@ -277,27 +401,94 @@
             <div class="profile-info">
                 <img src="{{ profile_image_url or 'default-profile.jpg' }}" alt="Profile Picture">
                 <h3>{{ username or 'Guest' }}</h3>
+            </div><!-- Inside the settings dropdown -->
+            <div id="settingsMenu" class="dropdown-menu" style="display: none;">
+                <a href="/profile">Profile 👤</a>
+                <a href="#" onclick="toggleDarkMode()">Dark Mode</a>
+                <a href="/logout">Log Out 🚪</a>  <!-- Logout link -->
             </div>
+
+            
         </aside>
     </div>
+    <script>
+        // Dropdown functions 
+        function showDropdown(id) {
+            document.getElementById(id).style.display = 'block';
+        }
+        function hideDropdown(id) {
+            document.getElementById(id).style.display = 'none';
+
+        }
+        function toggleDropdown(id) {
+            const dropdown = document.getElementById(id);
+            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+        }
+        // Status Upload Simulation
+
+        function startUpload(){
+            const progressBar = document.querySelector('.progress-bar');
+            let width = 0;
+            const interval = setInterval(() => {
+                width += 10;
+                progressBar.style.width = width + '%';
+                if(width >= 100){
+                    clearInterval(interval);
+                } else {
+                    width ++;
+                    progressBar.style.width = width + '%';
+                }
+            }, 50);
+        }
+    </script>
 
     <script>
-        const darkModeToggle = document.getElementById('dark-mode-toggle');
-
-        darkModeToggle.addEventListener('click', () => {
-            const elementsToToggle = [
+        function toggleDarkMode(){
+            const elementsToToggle=[
                 document.body,
                 document.querySelector('header'),
                 document.querySelector('.nav-column'),
                 document.querySelector('.conversation-column'),
                 document.querySelector('.content-column'),
-                document.querySelector('.profile-column')
+                document.querySelector('.profile-column'),
             ];
-
+            // Toggle dark mode class on all elements
             elementsToToggle.forEach(element => {
                 element.classList.toggle('dark-mode');
             });
+            //save prefrence to local storage
+            const isDark = document.body.classList.contains('dark-mode');
+            localStorage.setItem('dark-mode', isDark);
+
+        }
+        //load saved preferenceon page load
+        window.addEventListener('DOMContentLoaded', () => {
+            const isDark = localStorage.getItem('dark-mode') === 'true';
+            if(isDark){
+                document.querySelectorAll('.dark-mode-toggle, header, .nav-column, .conversation-column, .content-column, .profile-column').forEach(element => {
+                    element.classList.add('dark-mode');
+                });
+            }
         });
+
+        // Status Upload Simulation
+        function startUpload() {
+            const progressBar = document.querySelector('.progress-bar');
+            let width = 0;
+            const interval = setInterval(() => {
+                if (width >= 100) {
+                    clearInterval(interval);
+                    document.getElementById('statusMenu').style.display = 'none';
+                    progressBar.style.width = '0%';
+                } else {
+                    width++;
+                    progressBar.style.width = width + '%';
+                }
+            }, 50);
+        }
+        
+    
+    
     </script>
 </body>
 </html>
