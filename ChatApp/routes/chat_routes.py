@@ -11,7 +11,8 @@ chat_bp = Blueprint('chat', __name__)
 # Store connected users (key: socket id, value: username and avatar)
 users = {}
 
-@chat_bp.route('/')
+
+@chat_bp.route('/chat-feed')
 @login_required
 def index():
     """
